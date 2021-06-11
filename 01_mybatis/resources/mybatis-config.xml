@@ -6,16 +6,23 @@
 	<environments default="dev">
 	
 		<environment id="dev">
-		
 			<transactionManager type="JDBC"/>
-			
 			<dataSource type="POOLED">
 				<property name="driver" value="oracle.jdbc.driver.OracleDriver"/>
 				<property name="url" value="jdbc:oracle:thin:@localhost:1521:xe"/>
 				<property name="username" value="STUDENT"/>
 				<property name="password" value="STUDENT"/>
 			</dataSource>
-			
+		</environment>
+		
+		<environment id="WEB">
+			<transactionManager type="JDBC"/>
+			<dataSource type="POOLED">
+				<property name="driver" value="oracle.jdbc.driver.OracleDriver"/>
+				<property name="url" value="jdbc:oracle:thin:@localhost:1521:xe"/>
+				<property name="username" value="WEB"/>
+				<property name="password" value="WEB"/>
+			</dataSource>
 		</environment>
 		
 	</environments>

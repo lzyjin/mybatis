@@ -1,6 +1,7 @@
 package com.mybatis.common;
 
 import java.io.InputStream;
+import java.util.Map;
 
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
@@ -14,7 +15,7 @@ public class SqlSessionTemplate {
 		SqlSession session = null;
 		
 		// mybatis 설정 xml을 가져온다
-		String resource = "/mybatis-config.xml"; //  ????? resources폴더 바로 밑에 있어서 이렇게 쓰는것.
+		String resource = "/mybatis-config.xml"; // resources폴더 바로 밑에 있어서 이렇게 쓰는것.
 		
 		try {
 			
@@ -28,7 +29,7 @@ public class SqlSessionTemplate {
 			SqlSessionFactory ssf = sfb.build(is);
 			
 			// SqlSession 생성하기
-			session = ssf.openSession(false);
+			session = ssf.openSession(false); // false : 트랜잭션을 내가 설정
 			
 		} catch (Exception e) {
 			
@@ -39,4 +40,15 @@ public class SqlSessionTemplate {
 		return session;
 		
 	}
+	
+	// vo 이용하는것과 다른 방식
+	public static void getParamMap(Map<String, Object> param, Map<String, String[]> reqParam) {
+		
+		for(String key : reqParam.keySet()) {
+			param.put(key, reqParam.get(key)[0]);
+		}
+		
+	}
+	
+	
 }

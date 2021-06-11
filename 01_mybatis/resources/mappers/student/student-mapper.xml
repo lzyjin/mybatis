@@ -1,10 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC 
-"-//mybatis.org//DTD Mapper 3.0//EN" 
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="student">
-	<insert id="insertStudent">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace='student'>
+  	<insert id="insertStudent">
 		INSERT INTO STUDENT VALUES(SEQ_STUDENT.NEXTVAL, '유병승', '01012345678',
-								'PRINCE@COM', '경기도',DEFAULT)
+									'PRINCE@COM', '경기도',DEFAULT)
 	</insert>
+	
+	<insert id="insertStudentName" parameterType="string">
+		INSERT INTO STUDENT VALUES(SEQ_STUDENT.NEXTVAL, #{ name }, '01012341234', 
+									'PRINCE@COM', '서울시', DEFAULT)
+		
+	</insert>
+	
+	<insert id="insertStudentEmail" parameterType="string">
+		INSERT INTO STUDENT VALUES(SEQ_STUDENT.NEXTVAL, '김예진', '01012341234', 
+									#{ email }, '서울시', DEFAULT)
+	</insert>
+	
+	<insert id="insertParamAll" parameterType="com.mybatis.model.vo.Student">
+		INSERT INTO STUDENT VALUES(SEQ_STUDENT.NEXTVAL, #{ studentName }, #{ studentTel }, 
+									#{ studentEmail }, #{ studentAddr }, DEFAULT) 
+	</insert>
+	
+	<insert id="insertParamMap" parameterType="map">
+		INSERT INTO STUDENT VALUES(SEQ_STUDENT.NEXTVAL, #{ name }, #{ phone }, 
+									#{ email }, #{ addr }, DEFAULT) 
+	</insert>
+	
+	<update id="updateStudent" parameterType="com.mybatis.model.vo.Student">
+		UPDATE STUDENT SET STUDENT_TEL = #{ studentTel }, STUDENT_ADDR = #{ studentAddr } WHERE STUDENT_NAME = #{ studentName }
+	</update>
+	
+	<delete id="deleteStudent" parameterType="string">
+		DELETE FROM STUDENT WHERE STUDENT_NAME = #{ name }
+	</delete>
+	
+	
+	<!-- 
+		기본 자료형을 반환하는 select문 작성하기 
+		
+		반드시!!!!! 반환타입을 설정해야한다 !!!!!
+		
+		1. resultType 속성 : 기본데이터타입, 내가 선언한 클래스, jre클래스들을 선언할 때 
+			* 자동으로 컬럼과 vo객체를 매핑시키는데, 그 기준은 컬럼명 == 필드명 
+			 ( 컬럼명과 필드명이 같아야만 자동 매핑, 대소문자 구별없음, 알파벳만 일치하면 된다 ) 
+		
+		2. resultMap 속성 : vo객체의 필드명과 컬럼명이 다른 것을 매칭시킨다 
+			1) <resultMap>태그로 resultMap을 만든다 ( 컬럼과 필드를 매칭시키는 기능 ) 
+			2) <resultMap>태그의 id 속성의 값을 resultMap속성에 대입한다
+		
+	-->	
+	
+	<select id="selectCount" resultType="_int">
+		select count(*) from student
+	</select>
+	
+	
+	<select id="selectStudent" resultType="com.mybatis.model.vo.Student" parameterType="_int">
+		<!-- SELECT * FROM STUDENT WHERE STUDENT_NO = #{ no } -->
+		SELECT STUDENT_NO AS studentNo, 
+			   STUDENT_NAME as studentName, 
+			   STUDENT_TEL as studentTel, 
+			   STUDENT_EMAIL as studentEmail,
+			   STUDENT_ADDR as studentAddr, 
+			   REG_DATE as regDate
+		FROM STUDENT
+		WHERE STUDENT_NO = #{ no }
+	</select>
+	
 </mapper>
