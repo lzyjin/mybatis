@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="member">
+
+	<select id="selectMemberList" resultType="member">
+	 	SELECT * FROM MEMBER
+	</select>
+	
+	<select id="selectMemberList2" resultType="map">
+		SELECT * FROM MEMBER
+	</select>
+	
+	<select id="searchMemberName" resultType="member" parameterType="string">
+		SELECT * FROM MEMBER WHERE USERNAME LIKE '%' ||  #{ username } || '%'
+	</select>
+	
+	<select id="searchMemberAddr" resultType="member" parameterType="string">
+		SELECT * FROM MEMBER WHERE ADDRESS LIKE '%' ||  #{ addr } || '%'
+	</select>
+	
+	<select id="searchMemberId" resultType="member" parameterType="string">
+		SELECT * FROM MEMBER WHERE USERID = #{ id }
+	</select>
+	
+	<insert id="insertMember" parameterType="com.mybatis.model.vo.Member">
+		INSERT INTO MEMBER VALUES(#{userid}, #{password}, #{username},
+									#{gender}, #{age}, #{email},
+									#{phone}, #{address}, #{hobby}, SYSDATE)
+		
+	</insert>
+	
+	<update id="updateMember" parameterType="com.mybatis.model.vo.Member">
+		UPDATE MEMBER SET USERNAME = #{ username }, EMAIL = #{ email }, AGE = #{ age } WHERE USERID = #{ userid }
+	</update>
+	
+	<delete id="deleteMember" parameterType="string">
+		DELETE FROM MEMBER WHERE USERID = #{ id }
+	</delete>
+</mapper>

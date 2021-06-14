@@ -54,13 +54,12 @@
 	
 	<h3>등록된 회원의 이름, 주소, 전화번호를 받아서 수정해보자</h3>
 	
-	<form action="${ path }/update" method="post">
+	<%-- <form action="${ path }/update" method="post">
 		이름 <input type="text" name="name" value="">
 		주소 <input type="text" name="addr" value="">
 		전화번호 <input type="text" name="phone" value="">
 		<input type="submit" value="정보수정">
-	</form>
-	
+	</form> --%>
 	
 	
 	
@@ -89,12 +88,29 @@
 	
 	<h3>student 테이블의 학생 수 가져오기</h3>
 	
-	<a href="${ path }/selectCount">전체 학생수 표시</a>
+	<h4><a href="${ path }/selectCount">전체 학생수 표시</a></h4>
+	
+	<h4><a href="${ path }/selectStudent?no=1">1번학생 호출</a></h4>
+	
+	<h4><a href="${ path }/selectStudentlist">전체학생조회</a></h4>
 	
 	
 	
 	
-	<a href="${ path }/selectStudent?no=1">1번학생 호출</a>
+	<!-- 210614 -->
+	<h2>vo객체를 이용하지 않고 데이터 가져오기</h2>
+	
+	<p>
+		vo객체를 MAP객체로 대체해서 DB의 데이터를 가져올 수 있다
+		Map : key가 컬럼명, value가 값
+	</p>
+	
+	<h4><a href="${ path }/selectStudentMap?no=1">Map형식으로 학생 1명 조회</a></h4>
+	
+	<h4><a href="${ path }/selectStudentListMap">Map형식으로 전체 학생 조회</a></h4>
+	
+	
+	
 	
 </body>
 </html>

@@ -15,7 +15,10 @@ public class SqlSessionTemplate {
 		SqlSession session = null;
 		
 		// mybatis 설정 xml을 가져온다
-		String resource = "/mybatis-config.xml"; // resources폴더 바로 밑에 있어서 이렇게 쓰는것.
+		String resource = "/mybatis-config.xml"; 
+							// / : 루트( web안의 WEB-INF안의 classes 폴더 ) 
+							// 루트 하위에 있는 mybatis-config.xml 파일
+		// 그래서 이렇게 쓰는 것 
 		
 		try {
 			

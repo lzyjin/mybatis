@@ -3,6 +3,24 @@
 "-//mybatis.org//DTD Config 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-config.dtd" >
 <configuration>
+
+	<!-- 210614  -->
+
+	<settings>
+		<!-- NULL이 발생한 경우 빈칸이 아니라 null로 인식하도록 -->
+		<setting name="jdbcTypeForNull" value="NULL"/>
+	</settings>
+
+	
+	<!-- mybatis에서 사용하는 자바 객체에 대한 별칭을 부여하는 태그 -->
+	<!-- 태그의 순서를 지켜서 작성해야한다 -->
+	<typeAliases>
+		<typeAlias type="com.mybatis.model.vo.Student" alias="student"/>
+	</typeAliases>
+
+
+
+
 	<environments default="dev">
 	
 		<environment id="dev">

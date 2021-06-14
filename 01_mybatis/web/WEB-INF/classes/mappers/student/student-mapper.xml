@@ -1,34 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace='student'>
+
   	<insert id="insertStudent">
-		INSERT INTO STUDENT VALUES(SEQ_STUDENT.NEXTVAL, '유병승', '01012345678',
-									'PRINCE@COM', '경기도',DEFAULT)
+		INSERT INTO STUDENT VALUES(SEQ_STUDENT.NEXTVAL, 
+										'유병승', 
+										'01012345678',
+									    'PRINCE@COM', 
+									    '경기도',
+									    DEFAULT)
 	</insert>
 	
 	<insert id="insertStudentName" parameterType="string">
-		INSERT INTO STUDENT VALUES(SEQ_STUDENT.NEXTVAL, #{ name }, '01012341234', 
-									'PRINCE@COM', '서울시', DEFAULT)
+		INSERT INTO STUDENT VALUES(SEQ_STUDENT.NEXTVAL,
+									 #{ name }, 
+									 '01012341234', 
+									'PRINCE@COM', 
+									'서울시', 
+									DEFAULT)
 		
 	</insert>
 	
 	<insert id="insertStudentEmail" parameterType="string">
-		INSERT INTO STUDENT VALUES(SEQ_STUDENT.NEXTVAL, '김예진', '01012341234', 
-									#{ email }, '서울시', DEFAULT)
+		INSERT INTO STUDENT VALUES(SEQ_STUDENT.NEXTVAL, 
+									'김예진', 
+									'01012341234', 
+									#{ email }, 
+									'서울시', 
+									DEFAULT)
 	</insert>
 	
-	<insert id="insertParamAll" parameterType="com.mybatis.model.vo.Student">
-		INSERT INTO STUDENT VALUES(SEQ_STUDENT.NEXTVAL, #{ studentName }, #{ studentTel }, 
-									#{ studentEmail }, #{ studentAddr }, DEFAULT) 
+	<!-- <insert id="insertParamAll" parameterType="com.mybatis.model.vo.Student"> -->
+	<insert id="insertParamAll" parameterType="student">
+		INSERT INTO STUDENT VALUES(SEQ_STUDENT.NEXTVAL, 
+									#{ studentName }, 
+									#{ studentTel }, 
+									#{ studentEmail },
+									 #{ studentAddr }, 
+									 DEFAULT) 
 	</insert>
 	
 	<insert id="insertParamMap" parameterType="map">
-		INSERT INTO STUDENT VALUES(SEQ_STUDENT.NEXTVAL, #{ name }, #{ phone }, 
-									#{ email }, #{ addr }, DEFAULT) 
+		INSERT INTO STUDENT VALUES(SEQ_STUDENT.NEXTVAL, 
+									#{ name }, 
+									#{ phone }, 
+									#{ email }, 
+									#{ addr }, 
+									DEFAULT) 
 	</insert>
 	
-	<update id="updateStudent" parameterType="com.mybatis.model.vo.Student">
-		UPDATE STUDENT SET STUDENT_TEL = #{ studentTel }, STUDENT_ADDR = #{ studentAddr } WHERE STUDENT_NAME = #{ studentName }
+	<!-- <update id="updateStudent" parameterType="com.mybatis.model.vo.Student"> -->
+	<update id="updateStudent" parameterType="student">
+		UPDATE STUDENT SET STUDENT_TEL = #{ studentTel },
+							 STUDENT_ADDR = #{ studentAddr } WHERE STUDENT_NAME = #{ studentName }
 	</update>
 	
 	<delete id="deleteStudent" parameterType="string">
@@ -56,16 +80,81 @@
 	</select>
 	
 	
-	<select id="selectStudent" resultType="com.mybatis.model.vo.Student" parameterType="_int">
-		<!-- SELECT * FROM STUDENT WHERE STUDENT_NO = #{ no } -->
-		SELECT STUDENT_NO AS studentNo, 
+	<!-- <select id="selectStudent" resultType="com.mybatis.model.vo.Student" parameterType="_int"> -->
+	<select id="selectStudent" resultMap="studentMap" parameterType="_int">
+	
+		SELECT * FROM STUDENT WHERE STUDENT_NO = #{ no } 
+		
+		<!-- SELECT STUDENT_NO AS studentNo, 
 			   STUDENT_NAME as studentName, 
 			   STUDENT_TEL as studentTel, 
 			   STUDENT_EMAIL as studentEmail,
 			   STUDENT_ADDR as studentAddr, 
 			   REG_DATE as regDate
 		FROM STUDENT
-		WHERE STUDENT_NO = #{ no }
+		WHERE STUDENT_NO = #{ no } -->
+		
 	</select>
 	
+	
+	<!-- 210614 -->
+	
+	<!--
+		이렇게 하면 안된다. 제네릭에 들어갈 타입을 정해줘야하기때문 
+		resultType에 제네릭에 들어갈 (정해지지않은것은 이것뿐)클래스를 적어야한다
+	
+	 	<select id="selectStudentList" resultType="java.util.List"> 
+			SELECT * FROM STUDENT
+	<	/select> 
+	-->
+	
+	<!-- <select id="selectStudentList" resultType="com.mybatis.model.vo.Student"> 
+		 SELECT STUDENT_NO AS studentNo, 
+			   STUDENT_NAME as studentName, 
+			   STUDENT_TEL as studentTel, 
+			   STUDENT_EMAIL as studentEmail,
+			   STUDENT_ADDR as studentAddr, 
+			   REG_DATE as regDate
+		FROM STUDENT 
+	</select>  -->
+	
+	<!--  
+		더 간단한 방법이 있다 -> resultMap을 사용
+		<resultMap>태그 : 조회한 결과를 객체와 Row간의 1:1 매칭이 아닌 원하는 객체의 필드에 담아 반환하고자 할 때 사용
+	 -->
+	 
+	 <!-- <resultMap type="com.mybatis.model.vo.Student" id="studentMap"> -->
+	 <resultMap type="student" id="studentMap">
+	 
+	 	<result column="student_no" property="studentNo"/>
+		<result column="student_name" property="studentName"/>
+		<result column="student_tel" property="studentTel"/>
+		<result column="student_email" property="studentEmail"/>
+		<result column="student_addr" property="studentAddr"/>
+		<result column="reg_date" property="regDate"/>
+		
+	 </resultMap>
+	 
+	 <select id="selectStudentList" resultMap="studentMap"> 
+		 SELECT * FROM STUDENT 
+	</select> 
+	
+	
+	
+	<select id="searchEmail" resultMap="studentMap" parameterType="string">
+		SELECT * FROM STUDENT WHERE STUDENT_EMAIL LIKE '%' || #{ email } || '%'
+	</select>
+	
+	<select id="selectStudentMap" resultType="map" parameterType="_int">
+		SELECT * FROM STUDENT WHERE STUDENT_NO = #{ no }
+	</select>
+	
+	<select id="selectStudentListMap" resultType="map">
+	
+		<!-- SELECT * FROM STUDENT  -->
+		
+		<!-- 이렇게 하면 내가 원하는 데이터들만 화면에 출력할 수 있다 -->
+		SELECT STUDENT_NO, STUDENT_NAME, STUDENT_EMAIL FROM STUDENT 
+		
+	</select>
 </mapper>
