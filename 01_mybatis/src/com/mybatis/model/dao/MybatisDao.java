@@ -94,6 +94,8 @@ public class MybatisDao {
 
 
 
+	
+	// 210614 
 	public List<Student> selectStudentList(SqlSession session) {
 
 		return session.selectList("student.selectStudentList");

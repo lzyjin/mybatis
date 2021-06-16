@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="emp">
+	<resultMap type="com.mybatis.model.vo.Employee" id="empMap">
+		<result column="EMP_ID" property="empId"/>
+		<result column="EMP_NAME" property="empName"/>
+		<result column="EMP_NO" property="empNo"/>
+		<result column="EMAIL" property="email"/>
+		<result column="PHONE" property="phone"/>
+		<result column="DEPT_CODE" property="deptCode"/>
+		<result column="JOB_CODE" property="jobCode"/>
+		<result column="SAL_LEVEL" property="salLevel"/>
+		<result column="SALARY" property="salary"/>
+		<result column="BONUS" property="bonus"/>
+		<result column="MANAGER_ID" property="managerId"/>
+		<result column="HIRE_DATE" property="hireDate"/>
+		<result column="ENT_DATE" property="entDate"/>
+		<result column="ENT_YN" property="entYn"/>
+	</resultMap>
+
+  	<!-- <select id="selectEmpList" resultMap="empMap">
+  		SELECT * FROM EMPLOYEE
+  	</select> -->
+  	
+  	<select id="selectEmpList" resultType="map">
+  		SELECT * FROM EMPLOYEE
+  	</select>
+  	
+  	<select id="searchEmp" resultType="map" parameterType="map">
+  		
+  		<!-- SELECT *, decode(substr(emp_no, 8, 1), '1', 'M', '2', 'F')
+  		FROM EMPLOYEE  -->
+  		
+  		<!-- WHERE #{ key } LIKE '%' || #{ val } || '%' -->
+  		<!-- WHERE 'EMP_ID' LIKE '%' || #{ val } || '%'  -->
+  		
+  		<!-- 해결방법 : ${}로 쓰면 ''없는 문자리터럴로 들어감, #{}로 쓰면 '문자열'로 들어감 -->
+  	 	<!-- WHERE ${ key } LIKE '%' || #{ val } || '%'
+  	 			AND GENDER = #{ gender } -->
+  	 			
+  	 	SELECT * 
+		FROM (
+    		SELECT E.*, decode(substr(emp_no, 8, 1), '1', 'M', '2', 'F') AS GENDER
+    		FROM EMPLOYEE E
+    		)
+		<!-- WHERE --> 
+		<!-- <where> -->
+		<!-- <trim prefix="where" prefixOverrides="AND|OR"> -->
+		WHERE 1=1
+			<if test="val != null and val != ''">
+				 AND ${ key } LIKE '%' || #{ val } || '%' 
+			</if>
+			
+			<if test="gender != null and gender != ''">
+				AND GENDER = #{ gender }	
+  	 		</if>	
+  	 		
+  	 		<if test="le_ge != null and le_ge != '' and salary != null and salary != ''">
+  	 			
+  	 			<!-- <if test ="le_ge == 'le'">
+  	 				AND SALARY <= #{ salary } 
+  	 				AND SALARY &lt;= #{ salary } 
+  	 				AND SALARY <![CDATA[<=]]> #{ salary }
+  	 			</if> 
+  	 			<if test ="le_ge eq 'ge'">
+  	 				AND SALARY &gt;= #{ salary }
+  	 			</if> --> 
+  	 			
+  	 			<!--  여기서 le_ge는 키값이라서 ''쓰지 않음, 'le'는 밸류값이라서 꼭 이렇게 써야함  -->
+  	 			
+  	 			<choose>
+  	 				<when test="le_ge == 'le'">
+  	 					AND SALARY &lt;= #{ salary } 
+  	 				</when>
+  	 				<!-- <when test="le_ge == 'ge'">
+  	 					AND SALARY &gt;= #{ salary }
+  	 				</when> -->
+  	 				<otherwise>
+  	 					AND SALARY &gt;= #{ salary }
+  	 				</otherwise>
+  	 			</choose>
+  	 			
+  	 		</if>
+  	 		
+  	 		<if test="h_le_ge != null and h_le_ge != '' and hireDate != null and hireDate != ''">
+  	 			<choose>
+	  	 			<when test="h_le_ge == 'le'">
+	  	 				<!-- AND HIRE_DATE &lt;= #{ hireDate } -->
+	  	 				AND TO_DATE(TO_CHAR(HIRE_DATE, 'YYYY-MM-DD'), 'YYYY-MM-DD') &lt;= TO_DATE(#{ hireDate },'YYYY-MM-DD')
+	  	 			</when>
+	  	 			<otherwise>
+	  	 				<!-- AND HIRE_DATE &gt;= #{ hireDate } -->
+	  	 				AND TO_DATE(TO_CHAR(HIRE_DATE, 'YYYY-MM-DD'), 'YYYY-MM-DD') &gt;= TO_DATE(#{ hireDate },'YYYY-MM-DD')
+	  	 			</otherwise>
+  	 			</choose>
+  	 		</if>
+  	 	<!-- </trim> -->
+  	 	<!-- </where> -->		
+  	</select>
+</mapper>

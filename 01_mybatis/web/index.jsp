@@ -92,12 +92,12 @@
 	
 	<h4><a href="${ path }/selectStudent?no=1">1번학생 호출</a></h4>
 	
+	
+	<!-- 210614 -->
 	<h4><a href="${ path }/selectStudentlist">전체학생조회</a></h4>
 	
 	
 	
-	
-	<!-- 210614 -->
 	<h2>vo객체를 이용하지 않고 데이터 가져오기</h2>
 	
 	<p>

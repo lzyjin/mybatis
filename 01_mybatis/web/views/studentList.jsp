@@ -33,8 +33,8 @@
 			<th>등록일</th>
 		</tr>
 		
-		<c:if test="${ not empty list }">
-			<c:forEach var="s" items="${ list }">
+		<c:if test="${ not empty list1 }">
+			<c:forEach var="s" items="${ list1 }">
 				<tr>
 					<td><c:out value="${ s.studentNo }"/></td>
 					<td><c:out value="${ s.studentName }"/></td>

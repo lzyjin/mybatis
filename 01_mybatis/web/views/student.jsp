@@ -17,19 +17,19 @@
 			<th>가입일</th>
 		</tr>
 		<tr>
-			<%-- <td>${ student.student_No }</td>
-			<td>${ student.student_Name }</td>
-			<td>${ student.student_Tel }</td>
-			<td>${ student.student_Email }</td>
-			<td>${ student.student_Addr }</td>
-			<td>${ student.reg_Date }</td> --%>
+			<%-- <td>${ student1.student_No }</td>
+			<td>${ student1.student_Name }</td>
+			<td>${ student1.student_Tel }</td>
+			<td>${ student1.student_Email }</td>
+			<td>${ student1.student_Addr }</td>
+			<td>${ student1.reg_Date }</td> --%>
 			
-			<td>${ student.studentNo }</td>
-			<td>${ student.studentName }</td>
-			<td>${ student.studentTel }</td>
-			<td>${ student.studentEmail }</td>
-			<td>${ student.studentAddr }</td>
-			<td>${ student.regDate }</td>
+			<td>${ student1.studentNo }</td>
+			<td>${ student1.studentName }</td>
+			<td>${ student1.studentTel }</td>
+			<td>${ student1.studentEmail }</td>
+			<td>${ student1.studentAddr }</td>
+			<td>${ student1.regDate }</td>
 		</tr>
 	</table>
 	

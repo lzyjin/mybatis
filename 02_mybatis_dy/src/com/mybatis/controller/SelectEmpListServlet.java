@@ -2,6 +2,7 @@ package com.mybatis.controller;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,27 +10,28 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.mybatis.model.service.MybatisService;
-import com.mybatis.model.vo.Student;
+import com.mybatis.model.service.EmployeeService;
+import com.mybatis.model.vo.Employee;
 
 
-@WebServlet("/selectStudentlist")
-public class MybatisSelectStudentListServlet extends HttpServlet {
+@WebServlet("/selectEmpList")
+public class SelectEmpListServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-   
-    public MybatisSelectStudentListServlet() {
-       
+    
+    public SelectEmpListServlet() {
+        
     }
 
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		List<Student> list = new MybatisService().selectStudentList();
+//		List<Employee> list = new EmployeeService().selectEmpList();
+		List<Map> list = new EmployeeService().selectEmpList();
 		
-		request.setAttribute("list1", list);
+		request.setAttribute("list", list);
 		
-		request.getRequestDispatcher("/views/studentList.jsp").forward(request, response);
+		request.getRequestDispatcher("/views/result.jsp").forward(request, response);
 	}
 
 	

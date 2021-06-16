@@ -29,7 +29,7 @@ public class MybatisSelectStudentServlet extends HttpServlet {
 		
 			System.out.println(s);
 			
-		request.setAttribute("student", s);
+		request.setAttribute("student1", s);
 		
 		request.getRequestDispatcher("/views/student.jsp").forward(request, response);
 	}
