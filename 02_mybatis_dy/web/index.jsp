@@ -10,7 +10,17 @@
 <meta charset="UTF-8">
 <title>mybatis 동적 Query</title>
 </head>
+
 <body>
+
 	<h3><a href="${ path }/selectEmpList">전체회원조회</a></h3>
+	
+	<!-- 210617  -->
+	
+	<h3><a href="${ path }/selectOneEmp?no=200">사원조회</a></h3>
+	
+	<!-- db계정 WEB으로 바꿈 ( driver.properties )  -->
+	<h3><a href="${ path }/boardView?no=36">게시글조회</a></h3>
+	
 </body>
 </html>

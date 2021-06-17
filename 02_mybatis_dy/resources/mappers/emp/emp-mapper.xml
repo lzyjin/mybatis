@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="emp">
-	<resultMap type="com.mybatis.model.vo.Employee" id="empMap">
+
+	<!-- <resultMap type="com.mybatis.model.vo.Employee" id="empMap">
 		<result column="EMP_ID" property="empId"/>
 		<result column="EMP_NAME" property="empName"/>
 		<result column="EMP_NO" property="empNo"/>
@@ -16,15 +17,25 @@
 		<result column="HIRE_DATE" property="hireDate"/>
 		<result column="ENT_DATE" property="entDate"/>
 		<result column="ENT_YN" property="entYn"/>
-	</resultMap>
+	</resultMap> -->
 
   	<!-- <select id="selectEmpList" resultMap="empMap">
   		SELECT * FROM EMPLOYEE
   	</select> -->
   	
+  	
+  	
+  	<!-- <select id="selectEmpList" resultType="map">
+  		SELECT * FROM EMPLOYEE
+  	</select> -->
+  	
+  	<!-- 210617 페이징처리 -->
   	<select id="selectEmpList" resultType="map">
   		SELECT * FROM EMPLOYEE
+  		
   	</select>
+  	
+  	
   	
   	<select id="searchEmp" resultType="map" parameterType="map">
   		
@@ -95,6 +106,148 @@
   	 			</choose>
   	 		</if>
   	 	<!-- </trim> -->
-  	 	<!-- </where> -->		
+  	 	<!-- </where> -->	
+  	 	
+  	 	
+  	 	
+  	 	
+  	 	
+  	 	<!-- 210617  -->
+  	 	<if test="deptcode != null and deptcode != ''">
+  	 	
+  	 		 AND DEPT_CODE IN <!-- ('', '', '') -->
+  	 		
+  	 		<!-- <foreach collection="배열명"  ( el에서 foreach태그의 items )
+  	 					  item="배열 한개 값을 저장하는 변수" ( el에서 foreach태그의 var )
+  	 					  index="인덱스번호저장변수" 
+  	 					  open="시작할 때 넣는 문자" ( IN을 쓸거면 "(", varstatus의 first ) 
+  	 					  close="끝났을 때 넣는 문자"  ( IN을 쓸거면 ")" , varstatus의 last ) 
+  	 					  separator="구분자"> 배열의 값 #{ item값 } </foreach> -->
+  	 		<foreach collection="deptcode" item="v" index="i" open="(" close=")" separator=",">#{ v }</foreach>
+  	 	</if>
+  	 		
   	</select>
+  	
+  	
+  	
+  	<select id="selectEmpCount" resultType="_int">
+  		SELECT COUNT(*) FROM EMPLOYEE
+  	</select>
+  	
+  	
+  	
+  	<select id="selectSearchEmpCount" parameterType="map" resultType="_int">
+  		SELECT COUNT(*)
+  		FROM (
+    		SELECT E.*, decode(substr(emp_no, 8, 1), '1', 'M', '2', 'F') AS GENDER
+    		FROM EMPLOYEE E
+    		)
+    	WHERE 1=1
+    	<if test="val != null and val != ''">
+			AND ${ key } LIKE '%' || #{ val } || '%' 
+		</if>
+			
+		<if test="gender != null and gender != ''">
+			AND GENDER = #{ gender }	
+  	 	</if>	
+  	 	<if test="le_ge != null and le_ge != '' and salary != null and salary != ''">
+  	 		<choose>
+  	 			<when test="le_ge == 'le'">
+  	 				AND SALARY &lt;= #{ salary } 
+  	 			</when>
+  	 				<!-- <when test="le_ge == 'ge'">
+  	 					AND SALARY &gt;= #{ salary }
+  	 				</when> -->
+  	 			<otherwise>
+  	 				AND SALARY &gt;= #{ salary }
+  	 			</otherwise>
+  	 		</choose>
+  	 	</if>
+  	 	<if test="h_le_ge != null and h_le_ge != '' and hireDate != null and hireDate != ''">
+  	 			<choose>
+	  	 			<when test="h_le_ge == 'le'">
+	  	 				<!-- AND HIRE_DATE &lt;= #{ hireDate } -->
+	  	 				AND TO_DATE(TO_CHAR(HIRE_DATE, 'YYYY-MM-DD'), 'YYYY-MM-DD') &lt;= TO_DATE(#{ hireDate },'YYYY-MM-DD')
+	  	 			</when>
+	  	 			<otherwise>
+	  	 				<!-- AND HIRE_DATE &gt;= #{ hireDate } -->
+	  	 				AND TO_DATE(TO_CHAR(HIRE_DATE, 'YYYY-MM-DD'), 'YYYY-MM-DD') &gt;= TO_DATE(#{ hireDate },'YYYY-MM-DD')
+	  	 			</otherwise>
+  	 			</choose>
+  	 	</if>
+  	 	<if test="deptcode != null and deptcode != ''">
+	  	 	AND DEPT_CODE IN
+	  	 	<foreach collection="deptcode" item="v" index="i" open="(" close=")" separator=",">#{ v }</foreach>
+  	 	</if>
+  	</select>
+  	
+  	
+  	
+  	
+  	
+  	<!-- JAVA 방식대로 db연결  -->
+  	
+  	<select id="selectOneEmp" parameterType="string" resultMap="empMap">
+  		SELECT * 
+  		FROM EMPLOYEE
+  			JOIN DEPARTMENT ON DEPT_CODE = DEPT_ID
+  		WHERE EMP_ID = #{ no }
+  	</select>
+  	
+  	<resultMap type="com.mybatis.model.vo.Employee" id="empMap">
+  	
+  		<result column="EMP_ID" property="emp_id"/>
+  		<result column="EMP_NAME" property="emp_name"/>
+		<result column="EMP_NO" property="emp_no"/>
+		<result column="EMAIL" property="email"/>
+		<result column="PHONE" property="phone"/>
+		<result column="JOB_CODE" property="job_code"/>
+		<result column="SAL_LEVEL" property="sal_level"/>
+		<result column="SALARY" property="salary"/>
+		<result column="BONUS" property="bonus"/>
+		<result column="MANAGER_ID" property="manager_id"/>
+		<result column="HIRE_DATE" property="hire_date"/>
+		<result column="ENT_DATE" property="ent_date"/>
+		<result column="ENT_YN" property="ent_yn"/>
+		
+		<association property="dept" javaType="com.mybatis.model.vo.Department">
+			<id column="DEPT_ID" property="dept_id"/>
+			<result column="DEPT_TITLE" property="dept_title"/>
+			<result column="LOCATION_ID" property="location_id"/>
+		</association>
+		
+  	</resultMap>
+  	
+  	<select id="selectBoard" parameterType="string" resultMap="boardMap">
+  		SELECT *
+  		FROM BOARD
+  			JOIN BOARD_COMMENT ON BOARD_NO = BOARD_REF
+  		WHERE BOARD_NO = #{ no }
+  	</select>
+  	
+  	<resultMap type="com.mybatis.model.vo.Board" id="boardMap">
+  		<id column = "BOARD_NO" property="boardNo"/>
+  		<result column="BOARD_TITLE" property="boardTitle"></result>
+  		<result column="BOARD_WRITER" property="boardWriter"></result>
+  		<result column="BOARD_CONTENT" property="boardContent"></result>
+  		<result column="BOARD_DATE" property="boardDate"></result>
+  		
+  		<!-- <collection property="comments" ofType="com.mybatis.model.vo.Comment">컬렉션에 들어갈타입(제네릭이라고생각하자)
+  			<id column="BOARD_COMMENT_NO" property="commentNo"></id>
+  			<result column="BOARD_COMMENT_CONTENT" property="commentContent"></result>
+  			<result column="BOARD_COMMENT_WRITER" property="commentWriter"></result>
+  			<result column="BOARD_COMMENT_DATE" property="commentDate"></result>
+  		</collection> -->
+  		
+  		<collection property="comments" resultMap="commentMap"></collection>
+  	</resultMap>
+  	
+  	<!--  재사용성을 위해 이렇게 분리해도 된다 -->
+  	<resultMap type="com.mybatis.model.vo.Comment" id="commentMap">
+  		<id column="BOARD_COMMENT_NO" property="commentNo"></id>
+  		<result column="BOARD_COMMENT_CONTENT" property="commentContent"></result>
+  		<result column="BOARD_COMMENT_WRITER" property="commentWriter"></result>
+  		<result column="BOARD_COMMENT_DATE" property="commentDate"></result>
+  	</resultMap>
+  	
 </mapper>

@@ -4,10 +4,24 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <c:set var="path" value="${pageContext.request.contextPath}"/>
+
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<!-- Popper JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 <title>Insert title here</title>
 
 <style>
@@ -28,6 +42,11 @@
 </head>
 
 <body>
+
+<%-- 	<c:forEach var="e" items="${ paramValues.deptcode }" varStatus="">
+		<c:set var="deptcode" value="${ deptcode }&deptcode=${ e }"/>
+	</c:forEach>
+${ pageScope.deptcode } --%>
 
 	<h1>사원 조회</h1>
 	
@@ -83,6 +102,22 @@
 			</tr>
 			<tr>
 				<td colspan="2">
+					부서
+					<label><input type="checkbox" name="deptcode" value="D1">인사관리부</label>
+					<label><input type="checkbox" name="deptcode" value="D2">회계관리부</label>
+					<label><input type="checkbox" name="deptcode" value="D3">마케팅부</label>
+					<label><input type="checkbox" name="deptcode" value="D4">국내영업부</label>
+					<label><input type="checkbox" name="deptcode" value="D5">해외영업1부</label>
+					<label><input type="checkbox" name="deptcode" value="D6">해외영업2부</label>
+					<label><input type="checkbox" name="deptcode" value="D7">해외영업3부</label>
+					<label><input type="checkbox" name="deptcode" value="D8">기술지원부</label>
+					<label><input type="checkbox" name="deptcode" value="D9">총무부</label>
+					
+					
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">
 					<input type="submit" value="조회"> 
 				</td>
 			</tr>
@@ -115,6 +150,7 @@
 			
 				<c:forEach var="e" items="${ requestScope.list }" varStatus="vs">
 					<tr>
+						<!-- resultMap 사용하는 방법 -->
 						
 						<%-- <td><c:out value="${ e.empId }"/></td>
 						<td><c:out value="${ e.empName }"/></td>
@@ -133,7 +169,9 @@
 						<td><c:out value="${ e.entYn }"/></td>
 						 --%>
 						 
-						 <td><c:out value="${e['EMP_ID'] }"/></td>
+						 <!-- 반환형이 List<Map>인 방법 -->
+						 
+						<td><c:out value="${e['EMP_ID'] }"/></td>
 						<td><c:out value="${e['EMP_NAME'] }"/></td>
 						<td><c:out value="${e['EMP_NO'] }"/></td>
 						<td><c:out value="${e['EMAIL'] }"/></td>
@@ -151,5 +189,13 @@
 			
 		</c:if>
 	</table>
+	
+	
+	<!-- 페이징처리 -->
+	<!-- 부트스트랩4 MaxCDN 코드 복붙  -->
+	<div>
+		${ requestScope.pageBar }
+	</div>
+
 </body>
 </html>
